@@ -23,11 +23,15 @@
     "embeds": [
       {
         "label": "YouTube",
-        "code": "<iframe width='560' height='315' src='https://www.youtube.com/embed/VIDEO_ID' frameborder='0' allowfullscreen></iframe>"
+        "code": "<div class='sc-embed'><iframe allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen src='https://www.youtube.com/embed/VIDEO_ID?rel=0&showinfo=0' title='YouTube video' frameborder='0' scrolling='no'></iframe></div>"
       },
       {
-        "label": "Soundcloud",
-        "code": "<iframe width='100%' height='166' scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url=TRACK_URL'></iframe>"
+        "label": "SoundCloud",
+        "code": "<div class='sc-embed'><iframe allow='autoplay' src='https://w.soundcloud.com/player/?url=https://soundcloud.com/infiniteshadowx999/immediate-threat&visual=true&auto_play=false' title='Immediate Threat — SoundCloud player' frameborder='0' scrolling='no' allowfullscreen></iframe></div>"
+      },
+      {
+        "label": "General Purpose",
+        "code": "<div class='sc-embed'><iframe src='https://example.com/embed' title='General embed' frameborder='0' scrolling='no' allowfullscreen></iframe></div>"
       }
     ]
   },
