@@ -1,203 +1,143 @@
-:root {
-  --bg-main: #191932;
-  --bg-fade: #000000;
-  --slot-bg: rgba(255,255,255,0.03);
-  --slot-border: rgba(255,255,255,0.08);
-  --annotation-color: #cfcfcf;
-  --annotation-bg: rgba(0,0,0,0.45);
+:root{
+  --bg-main:#191932;
+  --bg-fade:#000000;
+  --slot-bg:rgba(255,255,255,0.03);
+  --slot-border:rgba(255,255,255,0.08);
+  --annotation-color:#cfcfcf;
+  --annotation-bg:rgba(0,0,0,0.45);
+  --notify-bg: rgba(0,0,0,0.75);
+  --notify-color: #ffffff;
+  --notify-accent: #9cff72;
 }
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  color: #fff;
-  background: radial-gradient(circle at center, var(--bg-main) 70%, var(--bg-fade) 100%);
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  padding: 2rem 1rem;
+/* Page layout */
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  color:#fff;
+  background:radial-gradient(circle at center,var(--bg-main) 70%,var(--bg-fade) 100%);
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:2rem 1rem;
 }
 
-/* Prevent the PDF embed from intercepting interactions when menu is open */
-body.menu-open .portal embed {
-  pointer-events: none;
+/* When menu is open, prevent PDF from intercepting pointer events */
+body.menu-open .portal embed{ pointer-events:none; }
+
+/* Portal (inspector) */
+.portal{
+  position:relative;
+  z-index:13000; /* keep the portal visually above embeds */
+  width:1024px;
+  max-width:calc(100vw - 2rem);
+  height:800px;
+  resize:both;
+  overflow:auto;
+  padding:1rem;
+  border-radius:16px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.15);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  box-shadow:0 0 20px rgba(255,255,255,0.15);
+  margin-bottom:1rem;
 }
 
-.portal {
-  position: relative;
-  width: 1024px;
-  max-width: calc(100vw - 2rem);
-  height: 800px;
-  resize: both;
-  overflow: auto;
-  padding: 1rem;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
-  margin-bottom: 1rem;
+/* Embeds container placed below the portal */
+.embeds{
+  position:relative;
+  z-index:12000; /* below the portal */
+  width:1024px;
+  max-width:calc(100vw - 2rem);
+  background:rgba(0,0,0,0.55);
+  padding:0.75rem;
+  border-radius:8px;
+  backdrop-filter:blur(4px);
+  display:none;
+  box-shadow:0 8px 30px rgba(0,0,0,0.6);
+  margin:0 auto 1rem auto;
 }
 
-#escMessage {
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  font-size: 0.9rem;
-  background: rgba(0,0,0,0.5);
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  text-shadow: 0 0 6px rgba(255,255,255,0.5);
-  z-index: 10000;
+/* Embed slots */
+.embed-slot{
+  background:var(--slot-bg);
+  border:1px dashed var(--slot-border);
+  border-radius:8px;
+  padding:0.5rem;
+  margin-bottom:0.6rem;
+  min-height:84px;
+  display:flex;
+  flex-direction:column;
+  gap:0.4rem;
 }
 
-/* Backup Themes button */
-.themes-toggle {
-  position: fixed;
-  bottom: 1rem;
-  left: 6.5rem;
-  z-index: 10001;
-  background: rgba(255,255,255,0.06);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: 0.35rem 0.6rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-.themes-toggle:hover { background: rgba(255,255,255,0.09); }
-
-.menu {
-  position: fixed;
-  bottom: 3rem;
-  left: 1rem;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 1rem;
-  border-radius: 8px;
-  display: none;
-  z-index: 10000;
-}
-.menu div {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
-  padding-bottom: 0.3rem;
-}
-.menu ul { list-style: none; margin: 0; padding: 0; }
-.menu li { margin: 0.5rem 0; cursor: pointer; }
-
-/* Embeds container moved below the portal (inline block under PDF) */
-.embeds {
-  width: 1024px;
-  max-width: calc(100vw - 2rem);
-  background: rgba(0,0,0,0.55);
-  padding: 0.75rem;
-  border-radius: 8px;
-  backdrop-filter: blur(4px);
-  z-index: 12000;
-  display: none;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-  margin: 0 auto 1rem auto;
+.slot-annotation{
+  font-family:'Courier New',monospace;
+  font-size:0.85rem;
+  color:var(--annotation-color);
+  background:var(--annotation-bg);
+  padding:0.25rem 0.5rem;
+  border-radius:6px;
+  align-self:flex-start;
 }
 
-/* Each slot is an annotated parking space */
-.embed-slot {
-  background: var(--slot-bg);
-  border: 1px dashed var(--slot-border);
-  border-radius: 8px;
-  padding: 0.5rem;
-  margin-bottom: 0.6rem;
-  min-height: 84px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+.slot-content{
+  flex:1;
+  width:100%;
+  overflow:hidden;
+  border-radius:6px;
 }
 
-/* Annotation bar at top of each slot */
-.slot-annotation {
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem;
-  color: var(--annotation-color);
-  background: var(--annotation-bg);
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  align-self: flex-start;
+/* Placeholder text when empty */
+.embed-slot .slot-content:empty::before{
+  content:"Paste embed code here";
+  color:rgba(255,255,255,0.25);
+  font-style:italic;
+  display:block;
+  padding:0.6rem;
 }
 
-/* Where the embed HTML will be inserted */
-.slot-content {
-  flex: 1;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 6px;
+/* Responsive iframes */
+.embed-slot iframe{ width:100%; height:100%; border:0; display:block; border-radius:6px; }
+
+/* Notification (centered, fading) */
+.theme-notification{
+  position:fixed;
+  left:50%;
+  top:12%;
+  transform:translateX(-50%) translateY(-10px);
+  background:var(--notify-bg);
+  color:var(--notify-color);
+  padding:0.9rem 1.2rem;
+  border-radius:12px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.6);
+  z-index:14000;
+  font-family:'Segoe UI',sans-serif;
+  font-size:1.05rem;
+  font-weight:600;
+  letter-spacing:0.2px;
+  opacity:0;
+  pointer-events:none;
+  transition:transform 360ms cubic-bezier(.2,.9,.2,1), opacity 360ms cubic-bezier(.2,.9,.2,1);
+  display:inline-block;
+  white-space:nowrap;
 }
 
-/* If slot is empty, show a subtle placeholder */
-.embed-slot .slot-content:empty::before {
-  content: "Paste embed code here";
-  color: rgba(255,255,255,0.25);
-  font-style: italic;
-  display: block;
-  padding: 0.6rem;
-}
+.theme-notification.show{ opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto; }
+.theme-notification.fade-out{ opacity:0; transform:translateX(-50%) translateY(-10px); }
 
-/* Make iframes inside slots responsive */
-.embed-slot iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
-  border-radius: 6px;
-}
+.theme-notification .emoji{ margin-right:0.6rem; font-size:1.15rem; vertical-align:middle; }
+
+/* Controls and small UI */
+#escMessage{ position:fixed; bottom:1rem; left:1rem; font-size:0.9rem; background:rgba(0,0,0,0.5); padding:0.4rem 0.8rem; border-radius:6px; z-index:10000; }
+.themes-toggle{ position:fixed; bottom:1rem; left:6.5rem; z-index:10001; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.08); padding:0.35rem 0.6rem; border-radius:6px; cursor:pointer; font-size:0.9rem; }
+.menu{ position:fixed; bottom:3rem; left:1rem; background:rgba(0,0,0,0.85); color:#fff; padding:1rem; border-radius:8px; display:none; z-index:10000; }
+
+/* Player */
+.player{ position:fixed; left:1rem; bottom:7rem; width:360px; background:#0a0a0a; border:1px solid #2a2a2a; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.3); z-index:12000; padding:0.6rem; display:flex; flex-direction:column; gap:0.5rem; }
 
 /* Responsive tweaks */
-@media (max-width: 1100px) {
-  .portal, .embeds { width: calc(100vw - 2rem); }
-}
-@media (max-width: 640px) {
-  .embed-slot { min-height: 120px; }
-}
-
-/* Persistent player styles (unchanged) */
-.player {
-  position: fixed;
-  left: 1rem;
-  bottom: 7rem;
-  width: 360px;
-  background: #0a0a0a;
-  border: 1px solid #2a2a2a;
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  z-index: 12000;
-  padding: 0.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.player .display {
-  background: linear-gradient(180deg, #020202, #111);
-  color: #9cff72;
-  border: 1px solid #222;
-  border-radius: 6px;
-  padding: 0.5rem;
-  font-family: 'Courier New', monospace;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.player .display .label { opacity: 0.8; }
-.player .display .scroll-wrap { overflow: hidden; flex: 1; }
-.player .display .scroll-text { white-space: nowrap; display: inline-block; animation: marquee 12s linear infinite; }
-@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-.player .controls { display: flex; align-items: center; gap: 0.5rem; }
-.player .controls button { background: #222; color: #fff; border: 1px solid #444; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; }
-.player .controls button:hover { background: #2e2e2e; }
-.player .controls .volume { display: flex; align-items: center; gap: 0.4rem; margin-left: auto; }
-.player .controls input[type="range"] { width: 120px; accent-color: #9cff72; }
-.player audio { width: 100%; display: none; }
+@media(max-width:1100px){ .portal,.embeds{ width:calc(100vw - 2rem); } }
+@media(max-width:640px){ .embed-slot{ min-height:120px; } .theme-notification{ top:8%; font-size:0.95rem; padding:0.7rem 1rem; } }

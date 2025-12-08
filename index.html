@@ -1,56 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Portal Viewer</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
-  <div class="portal newest">
+  <div class="portal newest" id="portalWindow">
     <h1>Portal Viewer 📄</h1>
     <embed id="pdfEmbed"
            src="assets/docs/sample.pdf"
            type="application/pdf"
            width="100%"
            height="100%"
-           style="border: none; border-radius: 8px;"
+           style="border:none;border-radius:8px;"
            tabindex="-1" />
   </div>
 
-  <!-- Embeds container moved below the PDF inspector window -->
-  <div id="embedContainer" class="embeds" style="display:none">
-    <!-- YouTube parking space -->
+  <!-- Embeds container intentionally placed after the portal inspector window -->
+  <div id="embedContainer" class="embeds" style="display:none" aria-hidden="true">
     <div id="embed-youtube" class="embed-slot" data-source="youtube" aria-label="YouTube embed slot">
       <div class="slot-annotation">YouTube Parking Space — paste YouTube iframe embed here</div>
       <div class="slot-content" aria-hidden="true"></div>
     </div>
 
-    <!-- SoundCloud parking space -->
     <div id="embed-soundcloud" class="embed-slot" data-source="soundcloud" aria-label="SoundCloud embed slot">
       <div class="slot-annotation">SoundCloud Parking Space — paste SoundCloud embed here</div>
       <div class="slot-content" aria-hidden="true"></div>
     </div>
 
-    <!-- General purpose parking space -->
     <div id="embed-general" class="embed-slot" data-source="general" aria-label="General embed slot">
       <div class="slot-annotation">General Purpose Parking Space — paste any other embed code here</div>
       <div class="slot-content" aria-hidden="true"></div>
     </div>
   </div>
 
-  <!-- ESC helper -->
   <div id="escMessage">ESC MENU</div>
 
-  <!-- Backup toggle button for the theme menu -->
   <button id="themesToggle" class="themes-toggle" aria-controls="themeMenu" aria-expanded="false">
     Themes
   </button>
 
-  <!-- Popup theme menu -->
   <div id="themeMenu" class="menu" aria-hidden="true"></div>
 
-  <!-- Persistent theme player (kept for audio file playback) -->
   <div id="themePlayer" class="player" aria-label="Theme audio player" style="display:none">
     <div class="display">
       <span class="label">TRACK:</span>
@@ -69,8 +62,7 @@
     <audio id="themeAudio" preload="auto"></audio>
   </div>
 
-  <!-- Center-screen fading notification -->
-  <div id="themeNotify" class="theme-notification" style="display:none"></div>
+  <div id="themeNotify" class="theme-notification" style="display:none" aria-live="polite"></div>
 
   <script src="assets/js/script.js"></script>
 </body>

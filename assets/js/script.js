@@ -106,29 +106,34 @@ function applyTheme(themeName) {
   if (slotSoundCloud) slotSoundCloud.innerHTML = '';
   if (slotGeneral) slotGeneral.innerHTML = '';
 
-  embedContainer.style.display = 'none';
+  if (embedContainer) {
+    embedContainer.style.display = 'none';
+    embedContainer.setAttribute('aria-hidden', 'true');
+  }
 
   // Populate slots when Hallways of Power is active
-  if (themeName === 'hallwaysofpower') {
-    // If theme.embeds exists, map by label to slots
-    if (Array.isArray(theme.embeds) && theme.embeds.length) {
-      theme.embeds.forEach(embed => {
-        const label = (embed.label || '').toLowerCase();
-        const code = embed.code || '';
-        if (label.includes('youtube') && slotYouTube) {
-          slotYouTube.innerHTML = code;
-          slotYouTube.setAttribute('aria-hidden', 'false');
-        } else if (label.includes('soundcloud') && slotSoundCloud) {
-          slotSoundCloud.innerHTML = code;
-          slotSoundCloud.setAttribute('aria-hidden', 'false');
-        } else if (slotGeneral) {
-          // Append to general if not matched
-          slotGeneral.innerHTML += code;
-          slotGeneral.setAttribute('aria-hidden', 'false');
-        }
-      });
+  if (themeName === 'hallwaysofpower' && Array.isArray(theme.embeds) && theme.embeds.length) {
+    // Inject embeds into the dedicated slots below the portal
+    theme.embeds.forEach(embed => {
+      const label = (embed.label || '').toLowerCase();
+      const code = embed.code || '';
+      if (label.includes('youtube') && slotYouTube) {
+        slotYouTube.innerHTML = code;
+        slotYouTube.setAttribute('aria-hidden', 'false');
+      } else if (label.includes('soundcloud') && slotSoundCloud) {
+        slotSoundCloud.innerHTML = code;
+        slotSoundCloud.setAttribute('aria-hidden', 'false');
+      } else if (slotGeneral) {
+        slotGeneral.innerHTML += code;
+        slotGeneral.setAttribute('aria-hidden', 'false');
+      }
+    });
+
+    // Show the embed container only after injection to ensure it appears below the portal
+    if (embedContainer) {
       embedContainer.style.display = 'block';
       embedContainer.style.zIndex = '12000';
+      embedContainer.setAttribute('aria-hidden', 'false');
     }
   }
 
@@ -156,30 +161,42 @@ function applyTheme(themeName) {
   showNotification(themeName);
 }
 
-/* ---------- Notification ---------- */
+/* ---------- Notification (restored center-screen fading) ---------- */
 function showNotification(themeName) {
   const notify = document.getElementById('themeNotify');
-  const emoji = {
+  if (!notify) return;
+
+  const emojiMap = {
     dreamy: '✨',
     misty: '🌫️',
     cosmic: '🌌',
     redlightbulbawareness: '💡',
     hallwaysofpower: '🏛️',
     forest: '🌲'
-  }[themeName] || '';
-  notify.textContent = `${emoji} ${themeName}`;
+  };
+
+  const emoji = emojiMap[themeName] || '';
+  notify.innerHTML = (emoji ? `<span class="emoji">${emoji}</span>` : '') + `<span class="label-text">${themeName}</span>`;
+
   notify.classList.remove('fade-out', 'show');
-  notify.style.display = 'block';
-  requestAnimationFrame(() => {
-    notify.classList.add('show');
-    setTimeout(() => {
-      notify.classList.add('fade-out');
-      setTimeout(() => {
-        notify.style.display = 'none';
-        notify.classList.remove('show', 'fade-out');
-      }, 900);
-    }, 900);
-  });
+  notify.style.display = 'inline-block';
+  // force reflow
+  // eslint-disable-next-line no-unused-expressions
+  notify.offsetWidth;
+  notify.classList.add('show');
+
+  const visibleMs = 900;
+  const fadeMs = 360;
+  clearTimeout(notify._hideTimer);
+  notify._hideTimer = setTimeout(() => {
+    notify.classList.remove('show');
+    notify.classList.add('fade-out');
+    clearTimeout(notify._cleanupTimer);
+    notify._cleanupTimer = setTimeout(() => {
+      notify.style.display = 'none';
+      notify.classList.remove('fade-out');
+    }, fadeMs);
+  }, visibleMs);
 }
 
 /* ---------- Helpers ---------- */
@@ -203,13 +220,14 @@ function buildMenu() {
   menu.innerHTML = '';
   menu.appendChild(label);
 
-  const order = ['dreamy', 'misty', 'cosmic', 'redlightbulbawareness', 'hallwaysofpower', 'forest'];
+  // Reordered: 1) dreamy, 2) redlightbulbawareness, 3) hallwaysofpower, then others
+  const order = ['dreamy', 'redlightbulbawareness', 'hallwaysofpower', 'misty', 'cosmic', 'forest'];
   const emojiMap = {
     dreamy: '1 ✨',
-    misty: '2 🌫️',
-    cosmic: '3 🌌',
-    redlightbulbawareness: '4 💡',
-    hallwaysofpower: '5 🏛️',
+    redlightbulbawareness: '2 💡',
+    hallwaysofpower: '3 🏛️',
+    misty: '4 🌫️',
+    cosmic: '5 🌌',
     forest: '6 🌲'
   };
 
@@ -250,7 +268,7 @@ function toggleMenu() {
   if (menu.style.display === 'block') hideMenu(); else showMenu();
 }
 
-/* ---------- Robust keyboard handling (capture) ---------- */
+/* ---------- Keyboard handling ---------- */
 function handleShortcut(event) {
   const key = event.key || event.keyIdentifier || event.keyCode;
   const k = (typeof key === 'string') ? key : String(key);
@@ -264,10 +282,10 @@ function handleShortcut(event) {
   }
 
   if (k === '1' || k === 49) { applyTheme('dreamy'); return; }
-  if (k === '2' || k === 50) { applyTheme('misty'); return; }
-  if (k === '3' || k === 51) { applyTheme('cosmic'); return; }
-  if (k === '4' || k === 52) { applyTheme('redlightbulbawareness'); return; }
-  if (k === '5' || k === 53) { applyTheme('hallwaysofpower'); return; }
+  if (k === '2' || k === 50) { applyTheme('redlightbulbawareness'); return; }
+  if (k === '3' || k === 51) { applyTheme('hallwaysofpower'); return; }
+  if (k === '4' || k === 52) { applyTheme('misty'); return; }
+  if (k === '5' || k === 53) { applyTheme('cosmic'); return; }
   if (k === '6' || k === 54) { applyTheme('forest'); return; }
 }
 
