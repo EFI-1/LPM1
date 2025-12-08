@@ -123,8 +123,6 @@ Images
 <br>
 ![Alt text](assets/image.jpg)
 <br>
-![Alt text](assets/default.jpg)
-<br>
 <!-- With title (appears on hover) -->
 ![Alt text](assets/images/example.png "Optional title")
 <br>
@@ -152,3 +150,11 @@ Mentions & References
 #123 → references an issue or pull request
 <br>
 -- >
+<br>
+<br>
+<br>
+<br>
+<br>
+![Alt text](assets/default.jpg)
+<br>
+THE A.I. AT https://www.TinyURL.com/SATLD SATURDAY! AT THE LIVEDOCKS!!
