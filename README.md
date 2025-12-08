@@ -121,7 +121,12 @@ Images
 
 [Link text](https://example.com)
 <br>
-![Alt text](image.png)
+![Alt text](assets/images/example.png)
+<br>
+<!-- With title (appears on hover) -->
+![Alt text](assets/images/example.png "Optional title")
+<br>
+![Alt text](https://example.com/image.jpg)
 <br>
 Tables
 <br>
