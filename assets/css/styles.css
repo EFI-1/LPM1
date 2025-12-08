@@ -1,27 +1,37 @@
 :root {
   --bg-main: #191932;
   --bg-fade: #000000;
+  --slot-bg: rgba(255,255,255,0.03);
+  --slot-border: rgba(255,255,255,0.08);
+  --annotation-color: #cfcfcf;
+  --annotation-bg: rgba(0,0,0,0.45);
 }
 
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   color: #fff;
-  background: radial-gradient(
-    circle at center,
-    var(--bg-main) 70%,
-    #000000 100%   /* solid black corners */
-  );
+  background: radial-gradient(circle at center, var(--bg-main) 70%, var(--bg-fade) 100%);
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: 2rem 1rem;
+}
+
+/* Prevent the PDF embed from intercepting interactions when menu is open */
+body.menu-open .portal embed {
+  pointer-events: none;
 }
 
 .portal {
   position: relative;
-  width: 800px;
-  height: 600px;
+  width: 1024px;
+  max-width: calc(100vw - 2rem);
+  height: 800px;
   resize: both;
   overflow: auto;
   padding: 1rem;
@@ -31,6 +41,7 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  margin-bottom: 1rem;
 }
 
 #escMessage {
@@ -42,7 +53,24 @@ body {
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
   text-shadow: 0 0 6px rgba(255,255,255,0.5);
+  z-index: 10000;
 }
+
+/* Backup Themes button */
+.themes-toggle {
+  position: fixed;
+  bottom: 1rem;
+  left: 6.5rem;
+  z-index: 10001;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.themes-toggle:hover { background: rgba(255,255,255,0.09); }
 
 .menu {
   position: fixed;
@@ -61,42 +89,115 @@ body {
   border-bottom: 1px solid rgba(255,255,255,0.3);
   padding-bottom: 0.3rem;
 }
-.menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.menu li {
-  margin: 0.5rem 0;
-  cursor: pointer;
+.menu ul { list-style: none; margin: 0; padding: 0; }
+.menu li { margin: 0.5rem 0; cursor: pointer; }
+
+/* Embeds container moved below the portal (inline block under PDF) */
+.embeds {
+  width: 1024px;
+  max-width: calc(100vw - 2rem);
+  background: rgba(0,0,0,0.55);
+  padding: 0.75rem;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+  z-index: 12000;
+  display: none;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  margin: 0 auto 1rem auto;
 }
 
-.portal h1.redlightbulbawareness {
-  font-family: 'Google Sans Code', monospace;
-  font-size: 3rem;
-  color: red;
-  background-color: black;
-  display: inline-block;
-  padding: 0.2rem;
-}
-
-.portal h1.hallwaysofpower {
-  font-family: 'Georgia', serif;
-  font-size: 3rem;
-  color: #333;
-  background: linear-gradient(90deg, lightgray, white, lightgray);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+/* Each slot is an annotated parking space */
+.embed-slot {
+  background: var(--slot-bg);
+  border: 1px dashed var(--slot-border);
+  border-radius: 8px;
   padding: 0.5rem;
-  border-bottom: 4px solid #ccc;
+  margin-bottom: 0.6rem;
+  min-height: 84px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-.portal h1.forest {
+/* Annotation bar at top of each slot */
+.slot-annotation {
   font-family: 'Courier New', monospace;
-  font-size: 3rem;
-  color: #0f0;
-  background-color: black;
-  text-shadow: 0 0 12px #0f0;
-  padding: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--annotation-color);
+  background: var(--annotation-bg);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  align-self: flex-start;
 }
+
+/* Where the embed HTML will be inserted */
+.slot-content {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+/* If slot is empty, show a subtle placeholder */
+.embed-slot .slot-content:empty::before {
+  content: "Paste embed code here";
+  color: rgba(255,255,255,0.25);
+  font-style: italic;
+  display: block;
+  padding: 0.6rem;
+}
+
+/* Make iframes inside slots responsive */
+.embed-slot iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  border-radius: 6px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 1100px) {
+  .portal, .embeds { width: calc(100vw - 2rem); }
+}
+@media (max-width: 640px) {
+  .embed-slot { min-height: 120px; }
+}
+
+/* Persistent player styles (unchanged) */
+.player {
+  position: fixed;
+  left: 1rem;
+  bottom: 7rem;
+  width: 360px;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  z-index: 12000;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.player .display {
+  background: linear-gradient(180deg, #020202, #111);
+  color: #9cff72;
+  border: 1px solid #222;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.player .display .label { opacity: 0.8; }
+.player .display .scroll-wrap { overflow: hidden; flex: 1; }
+.player .display .scroll-text { white-space: nowrap; display: inline-block; animation: marquee 12s linear infinite; }
+@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+.player .controls { display: flex; align-items: center; gap: 0.5rem; }
+.player .controls button { background: #222; color: #fff; border: 1px solid #444; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; }
+.player .controls button:hover { background: #2e2e2e; }
+.player .controls .volume { display: flex; align-items: center; gap: 0.4rem; margin-left: auto; }
+.player .controls input[type="range"] { width: 120px; accent-color: #9cff72; }
+.player audio { width: 100%; display: none; }
