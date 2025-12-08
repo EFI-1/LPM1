@@ -1,0 +1,102 @@
+:root {
+  --bg-main: #191932;
+  --bg-fade: #000000;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  color: #fff;
+  background: radial-gradient(
+    circle at center,
+    var(--bg-main) 70%,
+    #000000 100%   /* solid black corners */
+  );
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  resize: both;
+  overflow: auto;
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+#escMessage {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  font-size: 0.9rem;
+  background: rgba(0,0,0,0.5);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  text-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+
+.menu {
+  position: fixed;
+  bottom: 3rem;
+  left: 1rem;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  display: none;
+  z-index: 10000;
+}
+.menu div {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 0.3rem;
+}
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.menu li {
+  margin: 0.5rem 0;
+  cursor: pointer;
+}
+
+.portal h1.redlightbulbawareness {
+  font-family: 'Google Sans Code', monospace;
+  font-size: 3rem;
+  color: red;
+  background-color: black;
+  display: inline-block;
+  padding: 0.2rem;
+}
+
+.portal h1.hallwaysofpower {
+  font-family: 'Georgia', serif;
+  font-size: 3rem;
+  color: #333;
+  background: linear-gradient(90deg, lightgray, white, lightgray);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+  padding: 0.5rem;
+  border-bottom: 4px solid #ccc;
+}
+
+.portal h1.forest {
+  font-family: 'Courier New', monospace;
+  font-size: 3rem;
+  color: #0f0;
+  background-color: black;
+  text-shadow: 0 0 12px #0f0;
+  padding: 0.5rem;
+}
