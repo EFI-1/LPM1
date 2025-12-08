@@ -155,6 +155,8 @@ Mentions & References
 <br>
 <br>
 <br>
+
 ![Alt text](assets/default.jpg)
+
 <br>
 THE A.I. AT https://www.TinyURL.com/SATLD SATURDAY! AT THE LIVEDOCKS!!
