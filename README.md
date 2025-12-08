@@ -26,7 +26,7 @@ markdown
 <u> works reliably in GitHub READMEs, issues, and pull requests.
 For accessibility, underline is often reserved for links, so use it sparingly to avoid confusion.
 That’s it — a quick reference you can drop into your README.md to test how GitHub renders each style.
-<!--
+< !--
 Even More GitHub Flavored Markdown (GFM)
 # H1
 ## H2
@@ -76,4 +76,4 @@ Emojis
 Mentions & References
 @username → mentions a GitHub user
 #123 → references an issue or pull request
--->
+-- >
