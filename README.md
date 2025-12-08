@@ -121,7 +121,9 @@ Images
 
 [Link text](https://example.com)
 <br>
-![Alt text](assets/images/example.png)
+![Alt text](assets/image.jpg)
+<br>
+![Alt text](assets/default.jpg)
 <br>
 <!-- With title (appears on hover) -->
 ![Alt text](assets/images/example.png "Optional title")
